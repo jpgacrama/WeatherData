@@ -6,3 +6,7 @@ obj
 .vs/DebugTest/DesignTimeBuild/
 
 .vs/DebugTest/v16/
+
+.vs/
+
+.DS_Store

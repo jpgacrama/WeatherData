@@ -36,8 +36,21 @@ namespace DebugTest
             var data = streamReader2.ReadToEnd();
             var weatherInfo = JsonSerializer.Deserialize<WeatherInfo>(data);
             Console.WriteLine(location + " max temp: " + weatherInfo.consolidated_weather[0].max_temp + " min temp: " + weatherInfo.consolidated_weather[0].min_temp);
-            var streamWriter = new StreamWriter("weather" + location + DateTimeOffset.Now.ToUnixTimeSeconds() + ".json");
-            streamWriter.Write(JsonSerializer.Serialize(weatherInfo));
+
+            try
+            {
+                StreamWriter sw = new StreamWriter("weather" + location + DateTimeOffset.Now.ToUnixTimeSeconds() + ".json");
+                sw.Write(JsonSerializer.Serialize(weatherInfo));
+               sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
         }
 
         private static void Main(string[] args)
