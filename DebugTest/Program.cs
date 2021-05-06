@@ -27,6 +27,15 @@ namespace DebugTest
             return id;
         }
 
+        private string getDataFromGPSCoordinates(string location) {
+            System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
+            var response = client.GetAsync("https://www.metaweather.com/api/location/search/?lattlong=" + location).Result;
+            var streamReader = new StreamReader(response.Content.ReadAsStreamAsync().Result);
+            var content = streamReader.ReadToEnd();
+            id = content.Split("woeid\":")[1].Split(",")[0];
+            return id;
+        }
+
         private string enterLocationOrGPSCoordinates()
         {
             Console.WriteLine("Do you want to enter location (y/n):");
@@ -36,13 +45,13 @@ namespace DebugTest
             {
                 Console.WriteLine("Enter Desired Location:");
                 location = Console.ReadLine();
+                id = getDataFromLocation(location);
             }
             else {
                 Console.WriteLine("Enter Desired <Latitude,Longitude>:");
                 latLong = Console.ReadLine();
+                id = getDataFromGPSCoordinates(latLong);
             }
-
-            id = getDataFromLocation(location);
 
             return id;
         }
