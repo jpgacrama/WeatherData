@@ -44,6 +44,7 @@ namespace DebugTest
         {
             Program program = new Program();
             program.id = program.getDataFromWebURI();
+            program.getMetaWeatherData();
         }
     }
 
