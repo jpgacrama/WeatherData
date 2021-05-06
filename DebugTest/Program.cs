@@ -8,11 +8,23 @@ namespace DebugTest
     {
         private string location;
         private string id;
+        private string latLong;
 
         public Program()
         {
             location = "";
             id = "";
+            latLong = "";
+        }
+
+        private string getDataFromLocation(string location)
+        {
+            System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
+            var response = client.GetAsync("https://www.metaweather.com/api/location/search/?query=" + location).Result;
+            var streamReader = new StreamReader(response.Content.ReadAsStreamAsync().Result);
+            var content = streamReader.ReadToEnd();
+            id = content.Split("woeid\":")[1].Split(",")[0];
+            return id;
         }
 
         private string getDataFromWebURI()
@@ -20,16 +32,17 @@ namespace DebugTest
             Console.WriteLine("Do you want to enter location (y/n):");
 
             var choice = location = Console.ReadLine();
-            if (choice == "y" || choice == "Y") {
+            if (choice == "y" || choice == "Y")
+            {
                 Console.WriteLine("Enter Desired Location:");
                 location = Console.ReadLine();
             }
+            else {
+                Console.WriteLine("Enter Desired <Latitude,Longitude>:");
+                latLong = Console.ReadLine();
+            }
 
-            System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
-            var response = client.GetAsync("https://www.metaweather.com/api/location/search/?query=" + location).Result;
-            var streamReader = new StreamReader(response.Content.ReadAsStreamAsync().Result);
-            var content = streamReader.ReadToEnd();
-            id = content.Split("woeid\":")[1].Split(",")[0];
+            id = getDataFromLocation(location);
 
             return id;
         }
