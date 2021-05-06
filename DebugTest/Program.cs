@@ -17,8 +17,14 @@ namespace DebugTest
 
         private string getDataFromWebURI()
         {
-            Console.WriteLine("Enter location:");
-            location = Console.ReadLine();
+            Console.WriteLine("Do you want to enter location (y/n):");
+
+            var choice = location = Console.ReadLine();
+            if (choice == "y" || choice == "Y") {
+                Console.WriteLine("Enter Desired Location:");
+                location = Console.ReadLine();
+            }
+
             System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
             var response = client.GetAsync("https://www.metaweather.com/api/location/search/?query=" + location).Result;
             var streamReader = new StreamReader(response.Content.ReadAsStreamAsync().Result);
@@ -34,9 +40,16 @@ namespace DebugTest
             var response2 = client2.GetAsync("https://www.metaweather.com/api/location/" + id).Result;
             var streamReader2 = new StreamReader(response2.Content.ReadAsStreamAsync().Result);
             var data = streamReader2.ReadToEnd();
-            var weatherInfo = JsonSerializer.Deserialize<WeatherInfo>(data);
+            WeatherInfo weatherInfo = JsonSerializer.Deserialize<WeatherInfo>(data);
             Console.WriteLine(location + " max temp: " + weatherInfo.consolidated_weather[0].max_temp + " min temp: " + weatherInfo.consolidated_weather[0].min_temp);
 
+            // Call function to write Weather Data to File
+
+
+        }
+
+        private void writeWeatherDataToFile(WeatherInfo weatherInfo)
+        {
             try
             {
                 StreamWriter sw = new StreamWriter("weather" + location + DateTimeOffset.Now.ToUnixTimeSeconds() + ".json");
