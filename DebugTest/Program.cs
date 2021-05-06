@@ -41,7 +41,7 @@ namespace DebugTest
             {
                 StreamWriter sw = new StreamWriter("weather" + location + DateTimeOffset.Now.ToUnixTimeSeconds() + ".json");
                 sw.Write(JsonSerializer.Serialize(weatherInfo));
-               sw.Close();
+                sw.Close();
             }
             catch (Exception e)
             {
