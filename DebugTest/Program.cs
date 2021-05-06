@@ -27,7 +27,7 @@ namespace DebugTest
             return id;
         }
 
-        private string getDataFromWebURI()
+        private string enterLocationOrGPSCoordinates()
         {
             Console.WriteLine("Do you want to enter location (y/n):");
 
@@ -79,7 +79,7 @@ namespace DebugTest
         private static void Main(string[] args)
         {
             Program program = new Program();
-            program.id = program.getDataFromWebURI();
+            program.id = program.enterLocationOrGPSCoordinates();
             program.getMetaWeatherData();
         }
     }
