@@ -4,10 +4,11 @@ using System.Text.Json;
 
 namespace DebugTest
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            // Put this into a new function which gets the desired location
             Console.WriteLine("Enter location:");
             var location = Console.ReadLine();
 
@@ -21,30 +22,27 @@ namespace DebugTest
 
             var id = content.Split("woeid\":")[1].Split(",")[0];
 
-
-            while (true)
+            // Put this in a different function - reads data online
+            // I don't need a while loop as I can get data immediately
             {
                 System.Net.Http.HttpClient client2 = new System.Net.Http.HttpClient();
 
-                var response2 = client2.GetAsync("https://www.metaweather.com/api/location/" + id ).Result;
+                var response2 = client2.GetAsync("https://www.metaweather.com/api/location/" + id).Result;
 
                 var streamReader2 = new StreamReader(response2.Content.ReadAsStreamAsync().Result);
 
                 var data = streamReader2.ReadToEnd();
 
-                var weatherInfo = JsonSerializer.Deserialize< WeatherInfo >(data);
+                var weatherInfo = JsonSerializer.Deserialize<WeatherInfo>(data);
 
                 Console.WriteLine(location + " max temp: " + weatherInfo.consolidated_weather[0].max_temp + " min temp: " + weatherInfo.consolidated_weather[0].min_temp);
 
                 var streamWriter = new StreamWriter("weather" + location + DateTimeOffset.Now.ToUnixTimeSeconds() + ".json");
 
                 streamWriter.Write(JsonSerializer.Serialize(weatherInfo));
-
-                System.Threading.Thread.Sleep(2000);
             }
         }
     }
-
 
     public class WeatherInfo
     {
@@ -96,5 +94,4 @@ namespace DebugTest
         public string url { get; set; }
         public int crawl_rate { get; set; }
     }
-
 }
