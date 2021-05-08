@@ -38,20 +38,31 @@ namespace DebugTest
 
         private string enterLocationOrGPSCoordinates()
         {
-            Console.WriteLine("Do you want to enter location (y/n):");
-
-            var choice = location = Console.ReadLine();
-            if (choice == "y" || choice == "Y")
+            bool isWrongChoice = false;
+            do
             {
-                Console.WriteLine("Enter Desired Location:");
-                location = Console.ReadLine();
-                id = getDataFromLocation(location);
-            }
-            else {
-                Console.WriteLine("Enter Desired <Latitude,Longitude>:");
-                latLong = Console.ReadLine();
-                id = getDataFromGPSCoordinates(latLong);
-            }
+                Console.WriteLine("Do you want to enter location (y/n):");
+
+                var choice = location = Console.ReadLine();
+                if (choice == "y" || choice == "Y")
+                {
+                    Console.WriteLine("Enter Desired Location:");
+                    location = Console.ReadLine();
+                    id = getDataFromLocation(location);
+                }
+                else if (choice == "n" || choice == "N")
+                {
+                    Console.WriteLine("Enter Desired <Latitude,Longitude>:");
+                    latLong = Console.ReadLine();
+                    id = getDataFromGPSCoordinates(latLong);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid entry. Only (y/n) is accepted. Please try again.");
+                    isWrongChoice = true;
+                }
+
+            } while (isWrongChoice);
 
             return id;
         }
