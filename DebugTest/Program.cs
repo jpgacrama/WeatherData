@@ -38,7 +38,7 @@ namespace DebugTest
 
         private string enterLocationOrGPSCoordinates()
         {
-            bool isWrongChoice = false;
+            bool isWrongChoice = true;
             do
             {
                 Console.WriteLine("Do you want to enter location (y/n):");
@@ -46,12 +46,14 @@ namespace DebugTest
                 var choice = location = Console.ReadLine();
                 if (choice == "y" || choice == "Y")
                 {
+                    isWrongChoice = false;
                     Console.WriteLine("Enter Desired Location:");
                     location = Console.ReadLine();
                     id = getDataFromLocation(location);
                 }
                 else if (choice == "n" || choice == "N")
                 {
+                    isWrongChoice = false;
                     Console.WriteLine("Enter Desired <Latitude,Longitude>:");
                     latLong = Console.ReadLine();
                     id = getDataFromGPSCoordinates(latLong);
@@ -59,7 +61,6 @@ namespace DebugTest
                 else
                 {
                     Console.WriteLine("Invalid entry. Only (y/n) is accepted. Please try again.");
-                    isWrongChoice = true;
                 }
 
             } while (isWrongChoice);
@@ -87,8 +88,8 @@ namespace DebugTest
                 FileStream stream = new FileStream(fileName, FileMode.CreateNew);
                 StreamWriter sw = new StreamWriter(stream);
                 sw.Write(JsonSerializer.Serialize(weatherInfo));
-                Console.WriteLine("Writing to {0}", fileName);
                 sw.Close();
+                Console.WriteLine("Writing to {0} successful", fileName);
             }
             catch (Exception e)
             {
